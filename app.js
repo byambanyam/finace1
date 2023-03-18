@@ -31,8 +31,8 @@ var financeController = (function () {
     this.description = description;
     this.value = value;
   };
-  var date = {
-    allitems: {
+  var data = {
+    items: {
       inc: [],
       exp: [],
     },
@@ -41,18 +41,39 @@ var financeController = (function () {
       exp: 0,
     },
   };
+  return {
+    addItem: function (type, desc, val) {
+      var item, id;
+      if (data.items[type].length === 0) id = 1;
+      else {
+        id = data.items[type][data.items[type].length - 1].id + 1;
+      }
+      if (type === "inc") {
+        item = new Income(id, desc, val);
+      } else {
+        item = new Expense(id, desc, val);
+      }
+      data.items[type].push(item);
+    },
+    seeData: function () {
+      return data;
+    },
+  };
 })();
 // програмтай ажиллах контроллер
 var appcontroller = (function (uicontroller, financeController) {
   var ctrlAddItem = function () {
     // 1 oruulah ugugduliig delgetsees olj awna
-    console.log(uicontroller.getInput());
+    var input = uicontroller.getInput();
 
     // 2 ol awsan ugugdliig sanhuugiin kontroller damjuulj hadaglana
+    financeController.addItem(input.type, input.description, input.value);
     // 3 hadgalsan ugugdlii g bolowsruulj tohiroh bairlald bairshuulan
     // tusuw tootsoolono
     // 5 etssin uldegdel , tootsdog delegtsend garagjee};
   };
+  4;
+
   var setupEventlistene = function () {
     var DOM = uicontroller.getDOMstrings();
     document.querySelector(DOM.addBtn).addEventListener("click", function () {
